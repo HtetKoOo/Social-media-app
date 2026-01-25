@@ -1,9 +1,9 @@
 "use client";
-import Notification from "@/src/components/notification/Notification";
+import Notification from "@/components/notification/Notification";
 import React from "react";
 import { useGetNotifications } from "../../../../custom-hooks/useNotification";
 import { MdNotificationsActive } from "react-icons/md";
-import NotificationsSkeleton from "@/src/components/skeletons/NotificationsSkeleton";
+import NotificationsSkeleton from "@/components/skeletons/NotificationsSkeleton";
 
 export default function NotificationsPage() {
   const {
@@ -12,10 +12,10 @@ export default function NotificationsPage() {
     isError,
     error,
   } = useGetNotifications();
- 
-  
 
-  if (isLoading) return <NotificationsSkeleton/>;
+
+
+  if (isLoading) return <NotificationsSkeleton />;
   if (isError) return <p className="text-gray-300">{error.message}</p>;
 
   if (notifications?.length === 0) {
