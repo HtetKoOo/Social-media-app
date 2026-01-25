@@ -1,9 +1,9 @@
 import React from "react";
 import { auth } from "../../../auth";
 import { redirect } from "next/navigation";
-import LeftSidebar from "@/src/components/general/LeftSidebar";
-import Rightsidebar from "@/src/components/general/Rightsidebar";
-import Navbar from "@/src/components/general/Navbar";
+import LeftSidebar from "@/components/general/LeftSidebar";
+import Rightsidebar from "@/components/general/Rightsidebar";
+import Navbar from "@/components/general/Navbar";
 
 export default async function Layout({
   children,
@@ -16,11 +16,11 @@ export default async function Layout({
   return (
     <>
       <Navbar />
-      <LeftSidebar/>
+      <LeftSidebar />
       <div className="text-white mx-2 md:mx-20 lg:ml-110 xl:mr-100 mt-20">
         {children}
       </div>
-      <Rightsidebar/>
+      <Rightsidebar />
     </>
   );
 }

@@ -1,17 +1,17 @@
 "use client";
-import EditProfileModal from "@/src/components/modals/EditProfileModal";
+import EditProfileModal from "@/components/modals/EditProfileModal";
 import Image from "next/image";
 import React, { useState } from "react";
 import { SlCalender } from "react-icons/sl";
 import { useGetUser } from "../../../../custom-hooks/useUser";
 import moment from "moment";
-import ProfileSkeleton from "@/src/components/skeletons/ProfileSkeleton";
+import ProfileSkeleton from "@/components/skeletons/ProfileSkeleton";
 
 export default function ProfilePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: user, isLoading, isError, error } = useGetUser();
 
-  if (isLoading) return <ProfileSkeleton/>
+  if (isLoading) return <ProfileSkeleton />
   if (isError) return <h1 className="text-gray-300">{error.message}</h1>;
   return (
     <>

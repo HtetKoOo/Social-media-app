@@ -1,11 +1,11 @@
-import CommentInput from "@/src/components/comment/CommentInput";
-import Comments from "@/src/components/comment/Comments";
+import CommentInput from "@/components/comment/CommentInput";
+import Comments from "@/components/comment/Comments";
 import Image from "next/image";
 import React from "react";
 import { getPostByID } from "../../../../../server-actions/post";
 import { notFound } from "next/navigation";
 import moment from "moment";
-import PostActions from "@/src/components/post/PostActions";
+import PostActions from "@/components/post/PostActions";
 import { auth } from "../../../../../auth";
 
 export default async function PostViewPage({
@@ -69,10 +69,10 @@ export default async function PostViewPage({
       </div>
 
       {/* comment input */}
-      <CommentInput postId={post.id}/>
+      <CommentInput postId={post.id} />
 
       {/* comments */}
-      <Comments postId={post.id}/>
+      <Comments postId={post.id} />
     </>
   );
 }
