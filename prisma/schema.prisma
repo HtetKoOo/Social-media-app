@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  username      String   @unique
+  email         String   @unique
+  password      String
+  bio           String?
+  image         String?
+  imagePublicId String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  //Relationships
+  posts    Post[]    @relation("UserPosts")
+  comments Comment[] @relation("UserComments")
+  likes    Like[]    @relation("UserLikes")
+
+  // follow self-relations
+  followers Follow[] @relation("UserFollowers")
+  following Follow[] @relation("UserFollowing")
+
+  // notifications (sent/received)
+  notificationsReceived Notification[] @relation("NotificationsReceived")
+  notificationsSent     Notification[] @relation("NotificationsSent")
+
+  @@map("users")
+}
+
+model Post {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  text          String?
+  image         String?
+  imagePublicId String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  authorId      String   @db.ObjectId
+
+  //relationships
+  author        User           @relation("UserPosts", fields: [authorId], references: [id])
+  likes         Like[]         @relation("PostLikes")
+  comments      Comment[]      @relation("PostComments")
+  notifications Notification[] @relation("NotificationPost")
+
+  @@map("posts")
+}
+
+model Like {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  postId    String   @db.ObjectId
+  createdAt DateTime @default(now())
+  user      User     @relation("UserLikes", fields: [userId], references: [id], onDelete: Cascade)
+
+  //relationships
+  post Post @relation("PostLikes", fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@map("likes")
+}
+
+model Comment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  createdAt DateTime @default(now())
+  authorId  String   @db.ObjectId
+  postId    String   @db.ObjectId
+
+  author User @relation("UserComments", fields: [authorId], references: [id])
+  post   Post @relation("PostComments", fields: [postId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
+}
+
+model Follow {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  followerId  String   @db.ObjectId
+  followingId String   @db.ObjectId
+  createdAt   DateTime @default(now())
+
+  //relationships
+  following User @relation("UserFollowers", fields: [followingId], references: [id])
+  follower  User @relation("UserFollowing", fields: [followerId], references: [id])
+
+  @@unique([followerId, followingId])
+  @@map("follows")
+}
+
+model Notification {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  type       String //"like" "comment" "follow"
+  message    String
+  isRead     Boolean  @default(false)
+  receiverId String   @db.ObjectId
+  senderId   String   @db.ObjectId
+  postId     String?  @db.ObjectId
+  createdAt  DateTime @default(now())
+
+  //relationships
+  receiver User  @relation("NotificationsReceived", fields: [receiverId], references: [id], onDelete: Cascade)
+  sender   User? @relation("NotificationsSent", fields: [senderId], references: [id], onDelete: Cascade)
+
+  post Post? @relation("NotificationPost", fields: [postId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
