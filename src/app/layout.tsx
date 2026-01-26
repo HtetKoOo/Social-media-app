@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Nextjs Social Media App",
-  description: "Nextjs Fullstack Course",
+  title: "Fizzy",
+  description: "Social Media App",
 };
 
 export default function RootLayout({

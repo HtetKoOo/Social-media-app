@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { FaBell, FaHeart, FaHome, FaUser } from "react-icons/fa";
-import { TiSocialInstagramCircular } from "react-icons/ti";
+import { RiBubbleChartFill } from "react-icons/ri";
 import NotificationCount from "../notification/NotificationCount";
 
 const links = [
@@ -25,9 +25,9 @@ export default function Navbar() {
 
         {/* logo */}
       <div className="flex items-center gap-2 justify-center">
-        <TiSocialInstagramCircular size={35} color="#5D5FEF" />
+        <RiBubbleChartFill size={35} color="#5D5FEF" />
         <span className="text-2xl font-semibold tracking-wide text-gray-400">
-          Circle
+          Fizzy
         </span>
       </div>
 

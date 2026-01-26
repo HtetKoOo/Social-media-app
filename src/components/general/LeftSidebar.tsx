@@ -34,7 +34,7 @@ export default function LeftSidebar() {
         </div>
 
         <div className="mt-4 text-center text-gray-200">
-          <p>Egbon Emmanuel</p>
+          <p>{user?.name}</p>
           <p className="text-gray-400 text-sm">@{user?.username}</p>
           <p className="text-sm mt-6">
             {user?.bio || "Your bio will help others get to know you better!"}
