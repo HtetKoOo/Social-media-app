@@ -12,7 +12,7 @@ type PostComponentProps = {
 
 export default function Post({ post, userId }: PostComponentProps) {
   return (
-    <div className="bg-dark-3 p-4 rounded-2xl my-6">
+    <div className="bg-dark-3 p-2 sm:p-4 rounded-2xl my-4 sm:my-6">
       <div className="flex gap-2 items-center">
         <div className="relative w-10 h-10">
           <Image

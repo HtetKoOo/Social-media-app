@@ -57,7 +57,7 @@ export default function CreatePostInput() {
   };
   return (
     <div
-      className={`bg-dark-3 p-4 rounded-2xl ${isPending ? "opacity-60" : ""}`}
+      className={`bg-dark-3 p-2 sm:p-4 rounded-2xl ${isPending ? "opacity-60" : ""}`}
     >
       {showPicker && (
         <div className="fixed z-10 top-60 left-1/2 w-[90%] max-w-2xl -translate-x-1/2">
@@ -108,10 +108,10 @@ export default function CreatePostInput() {
               </button>
             </div>
           )}
-          <div className="mt-2 flex gap-4">
+          <div className="mt-1 sm:mt-2 flex gap-1 sm:gap-4">
             <button
               onClick={() => fileRef.current?.click()}
-              className="text-green-700 flex items-center gap-2 bg-dark-2 px-4 py-2 rounded-xl cursor-pointer"
+              className="text-green-700 flex items-center gap-1 sm:gap-2 bg-dark-2 px-4 py-2 rounded-xl cursor-pointer"
             >
               <IoMdPhotos size={20} />
               <span className="text-sm text-gray-400">Photo</span>
@@ -125,7 +125,7 @@ export default function CreatePostInput() {
             />
             <button
               onClick={() => setShowPicker(!showPicker)}
-              className="text-yellow-800 flex items-center gap-2 bg-dark-2 px-4 py-2 rounded-xl cursor-pointer"
+              className="text-yellow-800 flex items-center gap-1 sm:gap-2 bg-dark-2 px-4 py-2 rounded-xl cursor-pointer"
             >
               <MdOutlineEmojiEmotions size={20} />
               <span className="text-sm text-gray-400">Emoji</span>
@@ -133,7 +133,7 @@ export default function CreatePostInput() {
             <button
               disabled={isPending}
               onClick={handleCreatePost}
-              className={`text-blue-700 flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer ${
+              className={`text-blue-700 flex items-center gap-1 sm:gap-2 px-4 py-2 rounded-xl cursor-pointer ${
                 text.trim().length > 0 || postImage ? "bg-dark-2" : "bg-dark-4"
               }`}
             >
