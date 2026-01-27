@@ -18,12 +18,11 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const handleSignout = async () => {
-    await signOut();    
-  }
+    await signOut();
+  };
   return (
     <nav className="fixed top-0 w-full flex justify-between items-center h-17 px-2 sm:px-10 bg-dark-1 z-50">
-
-        {/* logo */}
+      {/* logo */}
       <div className="flex items-center gap-2 justify-center">
         <RiBubbleChartFill size={35} color="#5D5FEF" />
         <span className="text-2xl font-semibold tracking-wide text-gray-400">
@@ -48,14 +47,22 @@ export default function Navbar() {
               {isActive && (
                 <span className="mt-1 w-1.5 h-1.5 block bg-primary rounded-full"></span>
               )}
-              {link.href === "/notifications" && <NotificationCount/>}
+              {link.href === "/notifications" && <NotificationCount />}
             </li>
           );
         })}
       </ul>
+      <div>
+        <button className="text-white">test</button>
 
-      {/* logout button */}
-      <button onClick={handleSignout} className="bg-primary cursor-pointer px-4 py-2 text-white rounded-full">Logout</button>
+        {/* logout button */}
+        <button
+          onClick={handleSignout}
+          className="bg-primary cursor-pointer px-4 py-2 text-white rounded-full"
+        >
+          Logout
+        </button>
+      </div>
     </nav>
   );
 }
