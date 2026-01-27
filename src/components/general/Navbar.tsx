@@ -52,17 +52,14 @@ export default function Navbar() {
           );
         })}
       </ul>
-      <div>
-        <button className="text-white">test</button>
 
-        {/* logout button */}
-        <button
-          onClick={handleSignout}
-          className="bg-primary cursor-pointer px-4 py-2 text-white rounded-full"
-        >
-          Logout
-        </button>
-      </div>
+      {/* logout button */}
+      <button
+        onClick={handleSignout}
+        className="bg-primary cursor-pointer px-4 py-2 text-white rounded-full"
+      >
+        Logout
+      </button>
     </nav>
   );
 }
