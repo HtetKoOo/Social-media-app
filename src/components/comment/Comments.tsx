@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import { FaRegCommentDots, FaRegTrashAlt } from "react-icons/fa";
+import { FaEllipsisH, FaRegCommentDots, FaRegTrashAlt, FaPen } from "react-icons/fa";
 import { useDeleteComment, useInfiniteComments } from "../../../custom-hooks/useComment";
 import moment from "moment";
 import { toast } from "react-toastify";
@@ -11,42 +11,48 @@ import CommentSkeleton from "../skeletons/CommentSkeleton";
 export default function Comments({ postId }: { postId: string }) {
   const session = useSession();
   const userId = session.data?.user?.id
-  const {mutate:deleteCommentMutation,isPending} = useDeleteComment()
+  const { mutate: deleteCommentMutation, isPending } = useDeleteComment()
+  const [openDropdownId, setOpenDropdownId] = React.useState<string | null>(null);
+
+  const toggleDropdown = (commentId: string) => {
+    setOpenDropdownId((prev) => (prev === commentId ? null : commentId));
+  };
+
   const {
     data,
     isLoading,
     isError,
     error,
-    hasNextPage,    
+    hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
   } = useInfiniteComments(postId);
 
   const comments = data?.pages.flatMap((page) => page.comments) || [];
 
-  const handleDelete = (commentId:string) => {
-    if(!confirm("Are you sure you want to delete comment?")){
+  const handleDelete = (commentId: string) => {
+    if (!confirm("Are you sure you want to delete comment?")) {
       return;
     }
 
-    deleteCommentMutation({commentId,postId},{
-      onSuccess:() => {
-        toast("Comment deleted successfully",{
-          style:{
-            background:"#5D5FEF",
-            color:"white"
+    deleteCommentMutation({ commentId, postId }, {
+      onSuccess: () => {
+        toast("Comment deleted successfully", {
+          style: {
+            background: "#5D5FEF",
+            color: "white"
           }
         })
       }
     })
   }
 
-  if (isLoading) return <CommentSkeleton/>
+  if (isLoading) return <CommentSkeleton />
   if (isError) return <p className="text-gray-300">{error.message}</p>;
 
   if (comments.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center mb-10 py-5 px-4">
+      <div className="flex flex-col items-center justify-center mb-10 py-3 px-3">
         <div className="text-gray-400 mb-4">
           <FaRegCommentDots size={50} />
         </div>
@@ -63,8 +69,8 @@ export default function Comments({ postId }: { postId: string }) {
     <>
       {comments.map((comment) => {
         return (
-          <div key={comment.id} className="bg-dark-3 p-4 rounded-2xl my-6">
-            <div className="flex gap-2 items-center">
+          <div key={comment.id} className="mt-3 group">
+            <div className="flex gap-2">
               <div className="relative w-10 h-10">
                 <Image
                   src={comment.author.image || "/images/avatar.png"}
@@ -73,43 +79,68 @@ export default function Comments({ postId }: { postId: string }) {
                   className="object-cover rounded-full border-4 border-dark-4"
                 />
               </div>
-              <div>
-                <p>{comment.author.name}</p>
-                <div>
-                  <span className="mr-2 text-sm font-normal text-gray-500">
-                    @{comment.author.username}
-                  </span>
-                  <span className="text-primary text-sm font-semibold">
-                    {moment(comment.createdAt).fromNow()}
-                  </span>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1">
+                  <div className="flex flex-col px-4 py-2 bg-dark-4 rounded-2xl gap-1">
+                    <p className="text-gray-300 text-xs">{comment.author.name}</p>
+                    <p >{comment.content}</p>
+                  </div>
+                  {userId === comment.author.id && (
+                    <div className="relative">
+                      <button
+                        onClick={() => toggleDropdown(comment.id)}
+                        className="text-gray-300 hover:text-white hover:bg-dark-4 hover:rounded-full rounded-full transition-all cursor-pointer p-3 opacity-0 group-hover:opacity-100"
+                      >
+                        <FaEllipsisH size={14} />
+                      </button>
+                      {openDropdownId === comment.id && (
+                        <div className="absolute right-0 mt-2 p-1 bg-dark-4 rounded-2xl shadow-lg z-10 border border-gray-700">
+                          <button
+                            className="w-full text-left px-4 py-2 rounded-2xl text-sm text-gray-300 hover:bg-gray-700 hover:text-white flex items-center gap-2"
+                            onClick={() => {
+                              console.log("Edit comment:", comment.id);
+                              toast.info("Edit functionality coming soon!");
+                              setOpenDropdownId(null);
+                            }}
+                          >
+                            <FaPen size={12} /> Edit
+                          </button>
+                          <button
+                            className="w-full text-left px-4 py-2 rounded-2xl text-sm text-red-500 hover:bg-gray-700 hover:text-red-400 flex items-center gap-2"
+                            onClick={() => {
+                              handleDelete(comment.id);
+                              setOpenDropdownId(null);
+                            }}
+                            disabled={isPending}
+                          >
+                            <FaRegTrashAlt size={12} /> Delete
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
+                <span className="text-primary text-xs font-semibold">
+                  {moment(comment.createdAt).fromNow()}
+                </span>
               </div>
-            </div>
-
-            <p className="py-4 text-gray-200 text-sm">{comment.content}</p>
-
-            <div className="mt-4 mx-1 flex gap-6">
-              {userId === comment.author.id && (
-                  <button disabled={isPending} onClick={() => handleDelete(comment.id)} className="text-gray-300 cursor-pointer flex items-center gap-1">
-                <FaRegTrashAlt size={20} />
-              </button>
-              )}
-            
             </div>
           </div>
         );
       })}
-      {hasNextPage && (
-        <div className="flex justify-center mb-10">
-          <button
-            className="bg-primary text-white py-2 px-4 rounded-full cursor-pointer"
-            onClick={() => fetchNextPage()}
-            disabled={isFetchingNextPage}
-          >
-            {isFetchingNextPage ? "Loading..." : "Load more"}
-          </button>
-        </div>
-      )}
+      {
+        hasNextPage && (
+          <div className="flex justify-center mb-10">
+            <button
+              className="bg-primary text-white py-2 px-4 rounded-full cursor-pointer"
+              onClick={() => fetchNextPage()}
+              disabled={isFetchingNextPage}
+            >
+              {isFetchingNextPage ? "Loading..." : "Load more"}
+            </button>
+          </div>
+        )
+      }
     </>
   );
 }
