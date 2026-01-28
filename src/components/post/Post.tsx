@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { FaEllipsisH, FaTimes } from "react-icons/fa";
 import { Post as PostType } from "../../../types/post";
 import moment from "moment";
 import PostActions from "./PostActions";
@@ -23,15 +24,20 @@ export default function Post({ post, userId }: PostComponentProps) {
           />
         </div>
         <div>
-          <p>{post.author.name}</p>
+          <p className="font-semibold">{post.author.name}</p>
           <div>
-            <span className="mr-2 text-sm font-normal text-gray-500">
-              @{post.author.username}
-            </span>
             <span className="text-primary text-sm font-semibold">
               {moment(post.createdAt).fromNow()}
             </span>
           </div>
+        </div>
+        <div className="ml-auto flex items-center gap-1">
+          <button className="text-gray-300 hover:text-white hover:bg-dark-4 hover:rounded-full rounded-full transition-colors cursor-pointer p-3">
+            <FaEllipsisH size={18} />
+          </button>
+          <button className="text-gray-300 hover:text-white hover:bg-dark-4 hover:rounded-full rounded-full transition-colors cursor-pointer p-3">
+            <FaTimes size={18} />
+          </button>
         </div>
       </div>
       <Link href={`/post/${post.id}`}>

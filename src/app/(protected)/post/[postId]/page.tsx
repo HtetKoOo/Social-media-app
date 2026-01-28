@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import moment from "moment";
 import PostActions from "@/components/post/PostActions";
 import { auth } from "../../../../../auth";
+import { FaEllipsisH, FaTimes } from "react-icons/fa";
 
 export default async function PostViewPage({
   params,
@@ -24,7 +25,7 @@ export default async function PostViewPage({
   }
   return (
     <>
-      <div className="bg-dark-3 p-4 rounded-2xl my-6">
+      <div className="bg-dark-3 p-4 rounded-2xl my-3">
         <div className="flex gap-2 items-center">
           <div className="relative w-10 h-10">
             <Image
@@ -35,15 +36,20 @@ export default async function PostViewPage({
             />
           </div>
           <div>
-            <p>{post.author.name}</p>
+            <p className="font-semibold">{post.author.name}</p>
             <div>
-              <span className="mr-2 text-sm font-normal text-gray-500">
-                @{post.author.username}
-              </span>
               <span className="text-primary text-sm font-semibold">
                 {moment(post.createdAt).fromNow()}
               </span>
             </div>
+          </div>
+          <div className="ml-auto flex items-center gap-1">
+            <button className="text-gray-300 hover:text-white hover:bg-dark-4 hover:rounded-full rounded-full transition-colors cursor-pointer p-3">
+              <FaEllipsisH size={18} />
+            </button>
+            <button className="text-gray-300 hover:text-white hover:bg-dark-4 hover:rounded-full rounded-full transition-colors cursor-pointer p-3">
+              <FaTimes size={18} />
+            </button>
           </div>
         </div>
         {post.text && <p className="py-4 text-gray-200 text-sm">{post.text}</p>}
@@ -66,13 +72,13 @@ export default async function PostViewPage({
             postViewPage={true}
           />
         )}
-      </div>
 
-      {/* comment input */}
-      <CommentInput postId={post.id} />
+        {/* comment input */}
+        <CommentInput postId={post.id} />
 
-      {/* comments */}
-      <Comments postId={post.id} />
+        {/* comments */}
+        <Comments postId={post.id} />
+        </div>
     </>
   );
 }

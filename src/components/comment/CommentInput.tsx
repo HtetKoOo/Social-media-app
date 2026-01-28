@@ -34,8 +34,8 @@ export default function CommentInput({ postId }: { postId: string }) {
     });
   };
   return (
-    <div className="bg-dark-3 p-4 rounded-2xl">
-      <div className="flex gap-2">
+    <>
+      <div className="flex gap-2 mt-4 border-y border-dark-4 py-4">
         {isLoading ? (
            <div className="animate-pulse rounded-full w-12 h-12 bg-dark-4"></div>
         ) : (
@@ -56,7 +56,7 @@ export default function CommentInput({ postId }: { postId: string }) {
             placeholder="Leave a comment"
             className="bg-dark-2 w-full p-2 rounded-2xl outline-none resize-none"
           />
-          <div className="mt-2 flex gap-4">
+          <div className="mt-1 flex gap-4">
             <button className="text-yellow-800 flex items-center gap-2 bg-dark-2 px-4 py-2 rounded-xl cursor-pointer">
               <MdOutlineEmojiEmotions size={20} />
               <span className="text-sm text-gray-400">Emoji</span>
@@ -74,6 +74,6 @@ export default function CommentInput({ postId }: { postId: string }) {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
