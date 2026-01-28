@@ -61,7 +61,7 @@ export default function SignupComponent() {
         <div className="flex items-center gap-2 justify-center mb-8">
           <TiSocialInstagramCircular size={40} color="#5D5FEF" />
           <span className="text-3xl font-semibold tracking-wide text-gray-400">
-            Circle
+            Fizzy
           </span>
         </div>
         {/* heading */}
@@ -69,7 +69,7 @@ export default function SignupComponent() {
           Create a new account
         </h2>
         <p className="text-gray-500 text-center text-sm">
-          To use circle, Please enter your details
+          To use fizzy, Please enter your details
         </p>
 
         {/* form */}
