@@ -37,6 +37,7 @@ model User {
   // notifications (sent/received)
   notificationsReceived Notification[] @relation("NotificationsReceived")
   notificationsSent     Notification[] @relation("NotificationsSent")
+  savedPosts            SavedPost[]    @relation("UserSavedPosts")
 
   @@map("users")
 }
@@ -55,6 +56,7 @@ model Post {
   likes         Like[]         @relation("PostLikes")
   comments      Comment[]      @relation("PostComments")
   notifications Notification[] @relation("NotificationPost")
+  savedBy       SavedPost[]    @relation("PostSavedBy")
 
   @@map("posts")
 }
@@ -117,4 +119,17 @@ model Notification {
   post Post? @relation("NotificationPost", fields: [postId], references: [id], onDelete: Cascade)
 
   @@map("notifications")
+}
+
+model SavedPost {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  postId    String   @db.ObjectId
+  createdAt DateTime @default(now())
+
+  user User @relation("UserSavedPosts", fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation("PostSavedBy", fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@map("saved_posts")
 }

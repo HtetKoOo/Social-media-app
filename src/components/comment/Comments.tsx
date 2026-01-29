@@ -13,8 +13,34 @@ export default function Comments({ postId }: { postId: string }) {
   const userId = session.data?.user?.id
   const { mutate: deleteCommentMutation, isPending } = useDeleteComment()
   const [openDropdownId, setOpenDropdownId] = React.useState<string | null>(null);
+  const [openUp, setOpenUp] = React.useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
 
-  const toggleDropdown = (commentId: string) => {
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        openDropdownId &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpenDropdownId(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openDropdownId]);
+
+  const toggleDropdown = (commentId: string, event: React.MouseEvent) => {
+    // Check position
+    const rect = event.currentTarget.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - rect.bottom;
+    if (spaceBelow < 150) { // 150px approx for comment dropdown
+      setOpenUp(true);
+    } else {
+      setOpenUp(false);
+    }
     setOpenDropdownId((prev) => (prev === commentId ? null : commentId));
   };
 
@@ -86,15 +112,15 @@ export default function Comments({ postId }: { postId: string }) {
                     <p >{comment.content}</p>
                   </div>
                   {userId === comment.author.id && (
-                    <div className="relative">
+                    <div className="relative" ref={openDropdownId === comment.id ? dropdownRef : null}>
                       <button
-                        onClick={() => toggleDropdown(comment.id)}
+                        onClick={(e) => toggleDropdown(comment.id, e)}
                         className="text-gray-300 hover:text-white hover:bg-dark-4 hover:rounded-full rounded-full transition-all cursor-pointer p-3 opacity-0 group-hover:opacity-100"
                       >
                         <FaEllipsisH size={14} />
                       </button>
                       {openDropdownId === comment.id && (
-                        <div className="absolute right-0 mt-2 p-1 bg-dark-4 rounded-2xl shadow-lg z-10 border border-gray-700">
+                        <div className={`absolute right-0 p-1 w-44 bg-dark-4 rounded-2xl shadow-lg z-50 border border-gray-700 ${openUp ? "bottom-full mb-1" : "mt-2"}`}>
                           <button
                             className="w-full text-left px-4 py-2 rounded-2xl text-sm text-gray-300 hover:bg-gray-700 hover:text-white flex items-center gap-2"
                             onClick={() => {
@@ -103,7 +129,7 @@ export default function Comments({ postId }: { postId: string }) {
                               setOpenDropdownId(null);
                             }}
                           >
-                            <FaPen size={12} /> Edit
+                            <FaPen size={12} /> Edit Comment
                           </button>
                           <button
                             className="w-full text-left px-4 py-2 rounded-2xl text-sm text-red-500 hover:bg-gray-700 hover:text-red-400 flex items-center gap-2"
@@ -113,7 +139,7 @@ export default function Comments({ postId }: { postId: string }) {
                             }}
                             disabled={isPending}
                           >
-                            <FaRegTrashAlt size={12} /> Delete
+                            <FaRegTrashAlt size={12} /> Delete Comment
                           </button>
                         </div>
                       )}

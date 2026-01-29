@@ -31,6 +31,11 @@ export async function GET(req: Request) {
                   image: true,
                 },
               },
+              savedBy: {
+                select: {
+                  userId: true,
+                },
+              },
             },
           },
         },

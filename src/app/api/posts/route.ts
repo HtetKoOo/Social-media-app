@@ -85,6 +85,11 @@ export async function GET(req: Request) {
               name: true,
             },
           },
+          savedBy: {
+            select: {
+              userId: true,
+            },
+          },
         },
         orderBy: {
           createdAt: "desc",
