@@ -15,6 +15,11 @@ export async function getPostByID(postId: string) {
             id: true,
           },
         },
+        savedBy: {
+          select: {
+            userId: true,
+          },
+        },
       },
     });
 

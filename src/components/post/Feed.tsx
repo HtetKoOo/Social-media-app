@@ -27,7 +27,7 @@ export default function Feed({userId}:{userId:string}) {
   if (isLoading) return <PostSkeleton/>
   if (isError) return <p className="text-gray-300">{error.message}</p>;
   return (
-    <div className="mt-6">
+    <div className="mt-3">
       {allPosts.map((post, index) => {
         return (
           <div key={post.id} ref={index === allPosts.length - 1 ? ref : null}>

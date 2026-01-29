@@ -11,6 +11,9 @@ export interface Post {
     username: string | null; // Make nullable  
     image: string | null;
   };  
+  savedBy?: {
+    userId: string;
+  }[];
 }
 
 export interface PostsResponse {

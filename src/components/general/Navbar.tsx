@@ -3,13 +3,14 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { FaBell, FaHeart, FaHome, FaUser } from "react-icons/fa";
+import { FaBell, FaBookmark, FaHeart, FaHome, FaUser } from "react-icons/fa";
 import { RiBubbleChartFill } from "react-icons/ri";
 import NotificationCount from "../notification/NotificationCount";
 
 const links = [
   { href: "/home", icon: <FaHome /> },
   { href: "/liked-posts", icon: <FaHeart /> },
+  { href: "/saved-posts", icon: <FaBookmark /> },
   { href: "/notifications", icon: <FaBell /> },
   { href: "/profile", icon: <FaUser /> },
 ];
