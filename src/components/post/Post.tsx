@@ -22,8 +22,7 @@ export default function Post({ post, userId }: PostComponentProps) {
   const { mutate: savePostMutation } = useSavePost();
 
   const isSaved = post.savedBy?.some((save: { userId: string }) => save.userId === userId);
-  console.log("isSaved", isSaved);
-
+  
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
