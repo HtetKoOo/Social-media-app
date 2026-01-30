@@ -57,7 +57,7 @@ export default function CreatePostInput() {
   };
   return (
     <div
-      className={`bg-dark-3 p-2 sm:p-4 rounded-2xl ${isPending ? "opacity-60" : ""}`}
+      className={`bg-dark-3 p-2 sm:p-4 mb-4 rounded-2xl ${isPending ? "opacity-60" : ""}`}
     >
       {showPicker && (
         <div className="fixed z-10 top-60 left-1/2 w-[90%] max-w-2xl -translate-x-1/2">

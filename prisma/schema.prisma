@@ -38,6 +38,7 @@ model User {
   notificationsReceived Notification[] @relation("NotificationsReceived")
   notificationsSent     Notification[] @relation("NotificationsSent")
   savedPosts            SavedPost[]    @relation("UserSavedPosts")
+  stories               Story[]        @relation("UserStories")
 
   @@map("users")
 }
@@ -132,4 +133,17 @@ model SavedPost {
 
   @@unique([userId, postId])
   @@map("saved_posts")
+}
+
+model Story {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  text          String?
+  image         String?
+  imagePublicId String?
+  createdAt     DateTime @default(now())
+  expiresAt     DateTime
+  authorId      String   @db.ObjectId
+  author        User     @relation("UserStories", fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@map("stories")
 }
