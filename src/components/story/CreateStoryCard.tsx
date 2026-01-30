@@ -4,11 +4,15 @@ import { FaPlus } from "react-icons/fa";
 
 type CreateStoryCardProps = {
     userImage: string;
+    onClick: () => void;
 };
 
-export default function CreateStoryCard({ userImage }: CreateStoryCardProps) {
+export default function CreateStoryCard({ userImage, onClick }: CreateStoryCardProps) {
     return (
-        <div className="relative w-24 h-44 sm:w-28 sm:h-52 rounded-xl overflow-hidden cursor-pointer group hover:bg-dark-3/80 transition-colors bg-dark-3 flex flex-col shrink-0">
+        <div
+            onClick={onClick}
+            className="relative w-24 h-44 sm:w-28 sm:h-52 rounded-xl overflow-hidden cursor-pointer group hover:bg-dark-3/80 transition-colors bg-dark-3 flex flex-col shrink-0"
+        >
             {/* Top Image Section */}
             <div className="relative h-[75%] w-full border-b border-dark-4">
                 <Image

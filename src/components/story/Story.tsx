@@ -4,99 +4,10 @@ import StoryCard from "./StoryCard";
 import CreateStoryCard from "./CreateStoryCard";
 import { useGetUser } from "../../../custom-hooks/useUser";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-
-const DUMMY_STORIES = [
-    {
-        id: "1",
-        user: {
-            id: "u1",
-            name: "Chananyar Ap",
-            image: "https://i.pravatar.cc/150?u=u1",
-        },
-        image: "https://picsum.photos/id/1015/300/500",
-    },
-    {
-        id: "2",
-        user: {
-            id: "u2",
-            name: "Myint Myat Noe",
-            image: "https://i.pravatar.cc/150?u=u2",
-        },
-        image: "https://picsum.photos/id/1016/300/500",
-    },
-    {
-        id: "3",
-        user: {
-            id: "u3",
-            name: "Thu Hnin Phyusin",
-            image: "https://i.pravatar.cc/150?u=u3",
-        },
-        image: "https://picsum.photos/id/1018/300/500",
-    },
-    {
-        id: "4",
-        user: {
-            id: "u4",
-            name: "Hsu Myat",
-            image: "https://i.pravatar.cc/150?u=u4",
-        },
-        image: "https://picsum.photos/id/1019/300/500",
-    },
-    {
-        id: "5",
-        user: {
-            id: "u5",
-            name: "Cynthia Tun",
-            image: "https://i.pravatar.cc/150?u=u5",
-        },
-        image: "https://picsum.photos/id/1020/300/500",
-    },
-    {
-        id: "6",
-        user: {
-            id: "u6",
-            name: "Chananyar Ap",
-            image: "https://i.pravatar.cc/150?u=u6",
-        },
-        image: "https://picsum.photos/id/1021/300/500",
-    },
-    {
-        id: "7",
-        user: {
-            id: "u7",
-            name: "Chananyar Ap",
-            image: "https://i.pravatar.cc/150?u=u7",
-        },
-        image: "https://picsum.photos/id/1022/300/500",
-    },
-    {
-        id: "8",
-        user: {
-            id: "u8",
-            name: "Chananyar Ap",
-            image: "https://i.pravatar.cc/150?u=u8",
-        },
-        image: "https://picsum.photos/id/1023/300/500",
-    },
-    {
-        id: "9",
-        user: {
-            id: "u9",
-            name: "Chananyar Ap",
-            image: "https://i.pravatar.cc/150?u=u9",
-        },
-        image: "https://picsum.photos/id/1024/300/500",
-    },
-    {
-        id: "10",
-        user: {
-            id: "u10",
-            name: "Chananyar Ap",
-            image: "https://i.pravatar.cc/150?u=u10",
-        },
-        image: "https://picsum.photos/id/1025/300/500",
-    },
-];
+import { useInfiniteStories } from "../../../custom-hooks/useStory";
+import CreateStoryDialog from "./CreateStoryDialog";
+import StoryViewDialog from "./StoryViewDialog";
+import { Story as StoryType } from "../../../types/story";
 
 export default function Story() {
     const { data: user } = useGetUser();
@@ -104,13 +15,33 @@ export default function Story() {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const [showLeft, setShowLeft] = useState(false);
     const [showRight, setShowRight] = useState(true);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [selectedStory, setSelectedStory] = useState<StoryType | null>(null);
+    const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+
+    const {
+        data: storiesData,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+    } = useInfiniteStories();
+
+    const stories = storiesData?.pages.flatMap((page) => page.stories) || [];
 
     const handleScroll = () => {
         if (scrollContainerRef.current) {
             const { scrollLeft, scrollWidth, clientWidth } =
                 scrollContainerRef.current;
             setShowLeft(scrollLeft > 0);
-            setShowRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth);
+
+            // Check if we are near the end (within 20px)
+            const isNearEnd = Math.ceil(scrollLeft + clientWidth) >= scrollWidth - 20;
+            setShowRight(!isNearEnd);
+
+            // Infinite scroll trigger
+            if (isNearEnd && hasNextPage && !isFetchingNextPage) {
+                fetchNextPage();
+            }
         }
     };
 
@@ -118,7 +49,7 @@ export default function Story() {
         handleScroll();
         window.addEventListener("resize", handleScroll);
         return () => window.removeEventListener("resize", handleScroll);
-    }, []);
+    }, [storiesData]); // Re-run when stories change
 
     const scrollLeft = () => {
         if (scrollContainerRef.current) {
@@ -138,8 +69,20 @@ export default function Story() {
         }
     };
 
+    const handleStoryClick = (story: StoryType) => {
+        setSelectedStory(story);
+        setIsViewDialogOpen(true);
+    };
+
     return (
         <div className="relative w-full max-w-full group/list">
+            <CreateStoryDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />
+            <StoryViewDialog
+                isOpen={isViewDialogOpen}
+                onClose={() => setIsViewDialogOpen(false)}
+                story={selectedStory}
+            />
+
             {/* Left Scroll Button */}
             {showLeft && (
                 <button
@@ -165,9 +108,17 @@ export default function Story() {
                 onScroll={handleScroll}
                 className="flex gap-2 overflow-x-auto scrollbar-hide pb-4 w-full max-w-full scroll-smooth"
             >
-                <CreateStoryCard userImage={userImage} />
-                {DUMMY_STORIES.map((story) => (
-                    <StoryCard key={story.id} story={story} />
+                <CreateStoryCard
+                    userImage={userImage}
+                    onClick={() => setIsDialogOpen(true)}
+                />
+
+                {stories.map((story) => (
+                    <StoryCard
+                        key={story.id}
+                        story={story}
+                        onClick={() => handleStoryClick(story)}
+                    />
                 ))}
             </div>
         </div>
