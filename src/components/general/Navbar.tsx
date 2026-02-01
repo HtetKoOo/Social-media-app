@@ -3,16 +3,17 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { FaBell, FaBookmark, FaHeart, FaHome, FaUser } from "react-icons/fa";
+import { FaBell, FaBookmark, FaHeart, FaHome } from "react-icons/fa";
 import { RiBubbleChartFill } from "react-icons/ri";
 import NotificationCount from "../notification/NotificationCount";
+import { IoMdMenu } from "react-icons/io";
 
 const links = [
   { href: "/home", icon: <FaHome /> },
   { href: "/liked-posts", icon: <FaHeart /> },
   { href: "/saved-posts", icon: <FaBookmark /> },
   { href: "/notifications", icon: <FaBell /> },
-  { href: "/profile", icon: <FaUser /> },
+  { href: "/menu", icon: <IoMdMenu /> },
 ];
 
 export default function Navbar() {
@@ -26,11 +27,14 @@ export default function Navbar() {
       {/* Links Container - Aligned with Feed */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div className="w-full mx-2 md:mx-20 lg:mr-20 lg:ml-110 xl:mr-100 pointer-events-auto h-12">
-          <ul className="grid grid-cols-5 gap-1 h-full text-gray-300">
+          <ul className="grid grid-cols-5 lg:grid-cols-4 gap-1 h-full text-gray-300">
             {links.map((link) => {
               const isActive = pathname === link.href;
               return (
-                <li key={link.href} className="h-full">
+                <li
+                  key={link.href}
+                  className={`h-full ${link.href === "/menu" ? "block lg:hidden" : ""}`}
+                >
                   <Link
                     href={link.href}
                     className={`relative w-full h-full flex items-center justify-center rounded-2xl transition-all duration-200 ${isActive
@@ -51,12 +55,12 @@ export default function Navbar() {
       {/* Logo and Logout - Placed on top/sides */}
       <div className="absolute inset-x-0 top-0 h-full flex justify-between items-center px-2 sm:px-10 pointer-events-none">
         {/* Logo */}
-        <div className="flex hidden lg:flex items-center gap-2 pointer-events-auto z-20">
+        <Link href="/home" className="flex hidden lg:flex items-center gap-2 pointer-events-auto z-20">
           <RiBubbleChartFill size={35} color="#5D5FEF" />
           <span className="text-2xl font-semibold tracking-wide text-gray-400 hidden sm:block">
             Fizzy
           </span>
-        </div>
+        </Link>
 
         {/* Logout */}
         <button

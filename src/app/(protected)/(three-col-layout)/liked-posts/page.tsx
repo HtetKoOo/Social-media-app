@@ -1,5 +1,5 @@
 import React from 'react'
-import { auth } from '../../../../auth'
+import { auth } from '@/../auth'
 import LikedPosts from '@/components/post/LikedPosts';
 
 export default async function Page() {

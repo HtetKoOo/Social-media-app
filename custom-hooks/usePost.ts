@@ -4,7 +4,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { createPost, deletePost, getLikedPosts, getPosts, getPostStats } from "../services/post";
+import { createPost, deletePost, getLikedPosts, getPosts, getPostStats, getUserPosts } from "../services/post";
 
 export function useCreatePost() {
   const queryClient = useQueryClient();
@@ -72,4 +72,23 @@ export function useGetLikedPosts(){
     refetchInterval: false,
     retry: 1,    
   })
+}
+
+export function useUserPosts(userId: string) {
+  return useInfiniteQuery({
+    queryKey: ["posts", "user", userId],
+    queryFn: ({ pageParam }) => getUserPosts(userId, { pageParam }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      return lastPage.pagination.hasNextPage
+        ? lastPage.pagination.currentPage + 1
+        : undefined;
+    },
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: true,
+    refetchInterval: false,
+    retry: 1,
+    enabled: !!userId,
+  });
 }

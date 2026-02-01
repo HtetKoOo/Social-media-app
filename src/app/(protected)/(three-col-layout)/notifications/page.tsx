@@ -1,7 +1,7 @@
 "use client";
 import Notification from "@/components/notification/Notification";
 import React from "react";
-import { useGetNotifications } from "../../../../custom-hooks/useNotification";
+import { useGetNotifications } from "@/../custom-hooks/useNotification";
 import { MdNotificationsActive } from "react-icons/md";
 import NotificationsSkeleton from "@/components/skeletons/NotificationsSkeleton";
 

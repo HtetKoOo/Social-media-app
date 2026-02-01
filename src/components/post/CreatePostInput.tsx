@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useRef, useState } from "react";
 import { BsFillSendFill } from "react-icons/bs";
 import { IoMdPhotos } from "react-icons/io";
@@ -16,7 +17,7 @@ export default function CreatePostInput() {
   const [showPicker, setShowPicker] = useState(false);
   const fileRef = useRef<null | HTMLInputElement>(null);
   const { mutate: createPostMutation, isPending } = useCreatePost();
-  const {isLoading,data:user} = useGetUser();
+  const { isLoading, data: user } = useGetUser();
 
   const onEmojiClick = (emojidata: EmojiClickData) => {
     setText((prev) => prev + emojidata.emoji);
@@ -76,12 +77,14 @@ export default function CreatePostInput() {
           {isLoading ? (
             <div className="animate-pulse rounded-full w-12 h-12 bg-dark-4"></div>
           ) : (
-            <Image
-            src={user?.image || "/images/avatar.png"}
-            alt="profile-pic"
-            fill
-            className="object-cover rounded-full border-4 border-dark-4"
-          />
+            <Link href="/profile" className="relative block w-full h-full rounded-full overflow-hidden border-4 border-dark-4">
+              <Image
+                src={user?.image || "/images/avatar.png"}
+                alt="profile-pic"
+                fill
+                className="object-cover"
+              />
+            </Link>
           )}
         </div>
         <div className="flex-1">
@@ -133,9 +136,8 @@ export default function CreatePostInput() {
             <button
               disabled={isPending}
               onClick={handleCreatePost}
-              className={`text-blue-700 flex items-center gap-1 sm:gap-2 px-4 py-2 rounded-xl cursor-pointer ${
-                text.trim().length > 0 || postImage ? "bg-dark-2" : "bg-dark-4"
-              }`}
+              className={`text-blue-700 flex items-center gap-1 sm:gap-2 px-4 py-2 rounded-xl cursor-pointer ${text.trim().length > 0 || postImage ? "bg-dark-2" : "bg-dark-4"
+                }`}
             >
               <BsFillSendFill size={20} />
               <span className="text-sm text-gray-400">

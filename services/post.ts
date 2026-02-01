@@ -61,6 +61,7 @@ export async function getPostStats(postId: string): Promise<PostStats> {
 }
 
 
+
 export async function getLikedPosts({pageParam = 1}) : Promise<PostsResponse>{
   try {
     const response = await axios.get(`/api/posts/liked-posts?page=${pageParam}`);
@@ -72,5 +73,18 @@ export async function getLikedPosts({pageParam = 1}) : Promise<PostsResponse>{
     } else {
       throw error;
     }    
+  }
+}
+
+export async function getUserPosts(userId: string, { pageParam = 1 }): Promise<PostsResponse> {
+  try {
+    const response = await axios.get(`/api/posts/user/${userId}?page=${pageParam}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.error || "Failed to fetch user posts");
+    } else {
+      throw error;
+    }
   }
 }

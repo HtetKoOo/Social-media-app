@@ -1,4 +1,4 @@
-import { auth } from "../../../../auth";
+import { auth } from "@/../auth";
 import SavedPosts from "@/components/post/SavedPosts";
 import React from "react";
 

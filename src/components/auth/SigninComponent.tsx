@@ -4,7 +4,7 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { TiSocialInstagramCircular } from "react-icons/ti";
+import { RiBubbleChartFill } from "react-icons/ri";
 import z from "zod";
 
 const loginSchema = z.object({
@@ -47,7 +47,7 @@ export default function SigninComponent() {
       <div className="max-w-[320px] w-[90%]">
         {/* logo */}
         <div className="flex items-center gap-2 justify-center mb-8">
-          <TiSocialInstagramCircular size={40} color="#5D5FEF" />
+          <RiBubbleChartFill size={40} color="#5D5FEF" />
           <span className="text-3xl font-semibold tracking-wide text-gray-400">
             Fizzy
           </span>

@@ -2,11 +2,11 @@ import CommentInput from "@/components/comment/CommentInput";
 import Comments from "@/components/comment/Comments";
 import Image from "next/image";
 import React from "react";
-import { getPostByID } from "../../../../../server-actions/post";
+import { getPostByID } from "@/../server-actions/post";
 import { notFound } from "next/navigation";
 import moment from "moment";
 import PostActions from "@/components/post/PostActions";
-import { auth } from "../../../../../auth";
+import { auth } from "@/../auth";
 import { FaEllipsisH, FaTimes } from "react-icons/fa";
 
 export default async function PostViewPage({
